@@ -124,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "ebayTest"
+    }
+  },
+  "defaultProject": "ebayTest",
+  "cli": {
+    "analytics": false
+  }
 }
