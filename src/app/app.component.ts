@@ -17,18 +17,17 @@ export class AppComponent {
 
     constructor(private formBuilder: FormBuilder,
         private searchService: SearchService,
-        private router: Router
     ) {
         this.loginForm = this.formBuilder.group({
-            username: ['', [Validators.required, Validators.pattern('^[\\w]+$')]]
+            word: ['', [Validators.required, Validators.pattern('^[\\w]+$')]]
         });
     }
     
     public search() {
-        this.commonWords$ = this.searchService.search(this.username.value);
+        this.commonWords$ = this.searchService.search(this.word.value);
     }
     
-    get username() {
-        return this.loginForm.get('username');
+    get word() {
+        return this.loginForm.get('word');
     }
 }

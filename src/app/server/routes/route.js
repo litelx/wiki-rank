@@ -20,32 +20,30 @@ router.post('/search', async (req, res, next) => {
             // Getting the extract plain text
             let extract = parsedBody.query.pages[Object.keys(parsedBody.query.pages)[0]].extract;
             // Remove tag text
-            extract = extract.replace(/(<([^>]+)>)/gi, "");
+            extract = extract.replace(/(<([^>]+)>)/gi, "").toLowerCase();
             // Get only the words without the punctuation marks
             const words = extract.match(/(\w+)/g);
 
             const ranks = {};
             words.forEach(word => {
-                const lowerCaseWord = word.toLowerCase();
-                // Remove some trasition or connection words
-                if (!connectionWordsCommon.includes(lowerCaseWord)) {
-                    if (ranks[lowerCaseWord]) {
-                        ranks[lowerCaseWord]++
-                    } else {
-                        ranks[lowerCaseWord] = 1;
-                    }
+                if (ranks[word]) {
+                    ranks[word]++
+                } else {
+                    ranks[word] = 1;
                 }
             });
 
-            const list = []
+            const list = [];
             Object.keys(ranks).forEach(rank => {
                 list.push({ word: rank, amount: ranks[rank] })
             });
 
             const sortedList = list.sort(function (a, b) {
+                if (b.amount - a.amount == 0) 
+                    return a.word > b.word ? 1 : -1;
                 return b.amount - a.amount;
-            })
-            return sortedList.slice(0, 5);
+            });
+            return sortedList;
         })
         .catch(function (err) {
             console.error(err);
@@ -54,7 +52,7 @@ router.post('/search', async (req, res, next) => {
     let cs = 5;
     let lastValue = topCommon[0].amount;
     for (let i = 0; i < topCommon.length; i++) {
-        if (topCommon[i].amount < lastValue) {
+        if (topCommon[i].amount < lastValue && cs > 1) {
             cs--;
         }
         lastValue = topCommon[i].amount
@@ -63,8 +61,5 @@ router.post('/search', async (req, res, next) => {
     res.json(topCommon);
 });
 
-// some trasition or connection popular words
-const connectionWordsCommon = ['of', 'a', 'an', 'on', 'the', 'and', 'are', 'is', 'to', 'in', 's'];
-// const connectionWordsCommon = [];
 
 module.exports = router;
