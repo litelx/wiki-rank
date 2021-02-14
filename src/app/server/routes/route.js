@@ -22,7 +22,7 @@ router.post('/search', async (req, res, next) => {
             // Remove tag text
             extract = extract.replace(/(<([^>]+)>)/gi, "").toLowerCase();
             // Get only the words without the punctuation marks
-            const words = extract.match(/(\w+)/g);
+            const words = extract.match(/([a-zA-Z]+)/g);
 
             const ranks = {};
             words.forEach(word => {
@@ -58,7 +58,13 @@ router.post('/search', async (req, res, next) => {
         lastValue = topCommon[i].amount
         topCommon[i]['star'] = '*'.repeat(cs)
     }
-    res.json(topCommon);
+    const topCommonSorted = topCommon.sort(function (a, b) {
+        if (b.star.length - a.star.length == 0) 
+            return a.word > b.word ? 1 : -1;
+        return b.star.length - a.star.length;
+    });
+
+    res.json(topCommonSorted);
 });
 
 
