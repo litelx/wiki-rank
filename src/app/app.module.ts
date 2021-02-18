@@ -3,17 +3,19 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MaterialsModule } from './shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { DropdownComponent } from './dropdown/dropdown.component';
+import { AlbumDetailsComponent } from './album-details/album-details.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        DropdownComponent,
+        AlbumDetailsComponent
     ],
     imports: [
         BrowserModule,
-        MaterialsModule,
         FormsModule,
         ReactiveFormsModule,
 

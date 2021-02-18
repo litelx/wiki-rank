@@ -1,71 +1,50 @@
-const rp = require('request-promise');
+var request = require('request'); // "Request" library
 const express = require('express');
 const router = express.Router();
 
+var client_id = '8a580779fb6e4fe299c09d86d48b83ec';
+var client_secret = 'c844ed585cf646a4ad7ded3d3f7984f8';
+
 
 router.post('/search', async (req, res, next) => {
-    const searchItem = req.body.search;
-    const url = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles="
 
-    const options = {
-        method: 'POST',
-        uri: url + searchItem,
-        json: true,
-        headers: { 'Content-Type': 'application/json' }
+    // your application requests authorization
+    var authOptions = {
+        url: 'https://accounts.spotify.com/api/token',
+        headers: {
+            'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        },
+        form: {
+            grant_type: 'client_credentials'
+        },
+        json: true
     };
 
-    const topCommon = await rp(options)
-        .then(function (parsedBody) {
-            
-            // Getting the extract plain text
-            let extract = parsedBody.query.pages[Object.keys(parsedBody.query.pages)[0]].extract;
-            // Remove tag text
-            extract = extract.replace(/(<([^>]+)>)/gi, "").toLowerCase();
-            // Get only the words without the punctuation marks
-            const words = extract.match(/([a-zA-Z]+)/g);
+    const reponse = request.post(authOptions, function (error, response, body) {
+        if (!error && response.statusCode === 200) {
 
-            const ranks = {};
-            words.forEach(word => {
-                if (ranks[word]) {
-                    ranks[word]++
-                } else {
-                    ranks[word] = 1;
-                }
+            // use the access token to access the Spotify Web API
+            var token = body.access_token;
+            const url = `${apiDomain}:${apiPort}/${apiURL}/${artistId}/albums?limit=50&offset=0`;
+
+            var options = {
+                url: url,
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                },
+                json: true
+            };
+            request.get(options, function (error, response, body) {
+                res.json(body);
             });
-
-            const list = [];
-            Object.keys(ranks).forEach(rank => {
-                list.push({ word: rank, amount: ranks[rank] })
-            });
-
-            const sortedList = list.sort(function (a, b) {
-                if (b.amount - a.amount == 0) 
-                    return a.word > b.word ? 1 : -1;
-                return b.amount - a.amount;
-            });
-            return sortedList;
-        })
-        .catch(function (err) {
-            console.error(err);
-        });
-
-    let cs = 5;
-    let lastValue = topCommon[0].amount;
-    for (let i = 0; i < topCommon.length; i++) {
-        if (topCommon[i].amount < lastValue && cs > 1) {
-            cs--;
         }
-        lastValue = topCommon[i].amount
-        topCommon[i]['star'] = '*'.repeat(cs)
-    }
-    const topCommonSorted = topCommon.sort(function (a, b) {
-        if (b.star.length - a.star.length == 0) 
-            return a.word > b.word ? 1 : -1;
-        return b.star.length - a.star.length;
     });
-
-    res.json(topCommonSorted);
 });
 
+const apiDomain = 'https://any-api.com';
+const apiPort = 8443;
+const apiURL = 'https://api.spotify.com/v1/artists';
+
+const artistId = '0du5cEVh5yTK9QJze8zA0C';
 
 module.exports = router;

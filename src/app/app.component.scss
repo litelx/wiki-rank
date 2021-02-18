@@ -1,26 +1,20 @@
-.form {
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    flex-direction: column;
-    width: fit-content;
-    align-items: center;
-    margin: auto;
-}
-
-input {
-    margin: 10px 0;
-    height: 25px;
-    border: 1px solid #557fce;
-    border-radius: 3px;
-}
-.hint {
-    opacity: 0.7;
-}
-
-.submit-btn {
-    display: flex;
-    margin: 20px 0;
+form {
     width: 100%;
-    justify-content: center;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-family: roboto;
+    background-color: hsla(0, 0%, 94.5%, 0.2);
+    border: 0.5px solid #dbdbdb;
+    border-radius: 5px;
+    color: #444;
+    padding: 20px 40px;
+}
+
+@font-face {
+    font-family: roboto;
+    src: url("/assets/fonts/Roboto-Regular.ttf") format("opentype");
 }

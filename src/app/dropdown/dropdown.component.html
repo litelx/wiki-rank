@@ -1,0 +1,7 @@
+<div class="dropdown">
+    <label for="dropdown">{{label}}</label>
+
+    <select name="dropdown" id="dropdown" [(ngModel)]="currentOption" (change)="add(currentOption)">
+        <option *ngFor="let option of options" value="{{option.id}}">{{option.name}}</option>
+    </select>
+</div>

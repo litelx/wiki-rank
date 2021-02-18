@@ -1,15 +1,11 @@
-<form [formGroup]="loginForm" (ngSubmit)="search()" class="form">
-    <mat-label>Search Items</mat-label>
-    <input matInput [formControl]="word" required>
+<div *ngIf="artistAlbums$ | async as albums" class="container">
+    <form>
+        <dropdown [label]="title" [options]="albums.items" (chosenOption)="chosenAlbum($event)">
+        </dropdown>
+    </form>
 
-    <button mat-raised-button color="primary" mat-button class="submit-btn">
-        Submit
-    </button>
+    <album-details *ngIf="album" [album]="album">
+    </album-details>
 
-    <div *ngIf="commonWords$ | async as words" class="words-list">
-        <div *ngFor="let word of words">
-            {{word.word}}: {{word.star}}
-        </div>
-    </div>
-</form>
+</div>
 <!-- <router-outlet></router-outlet> -->

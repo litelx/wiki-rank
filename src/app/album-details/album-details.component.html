@@ -1,0 +1,25 @@
+<div *ngIf="album" class="details">
+    <div>
+        <span class="title">Album Name:</span>
+        {{album.name}}
+    </div>
+    <div *ngIf="album.release_date">
+        <span class="title">Release Date:</span>
+        {{album.release_date}}
+    </div>
+    
+    <!-- ********** not required ********** -->
+    <div *ngIf="album.artists.length" class="arists">
+        <span class="title">Artists Names: </span>
+        <div>
+            <span *ngFor="let artist of album.artists">{{artist.name}}</span>
+        </div>
+    </div>
+    <!-- ********** not required ********** -->
+    
+    <div *ngIf="album.images.length" class="images">
+        <div>
+            <img [src]="album.images[0].url" alt="">
+        </div>
+    </div>
+</div>
