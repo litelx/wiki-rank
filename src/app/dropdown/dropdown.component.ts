@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-// import * as EventEmitter from 'events';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { AlbumItem } from '../app.model';
 
 @Component({
@@ -7,18 +6,16 @@ import { AlbumItem } from '../app.model';
     templateUrl: './dropdown.component.html',
     styleUrls: ['./dropdown.component.scss']
 })
-export class DropdownComponent implements OnInit {
+export class DropdownComponent {
     @Input() label: string
     @Input() options: AlbumItem[];
     @Output() chosenOption: EventEmitter<AlbumItem> = new EventEmitter<AlbumItem>();
 
     public currentOption: AlbumItem;
+    
     constructor() { }
 
-    ngOnInit(): void {
-    }
-
-    add(currentOption){
+    public add(currentOption: string){
         const chosen = this.options.find(option => {
             return option.id === currentOption
         })

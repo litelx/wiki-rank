@@ -2,10 +2,22 @@
     padding: 10px;
 }
 
-.title {
-    font-family: 700;
-}
-.arists {
+.detail-item {
     display: flex;
     flex-direction: row;
+}
+
+.title {
+    font-weight: 700;
+    margin-right: 5px;
+    min-width: 120px;
+}
+
+.arist {
+    display: flex;
+    flex-direction: column;
+}
+
+.images {
+    margin: 10px 0;
 }

@@ -1,18 +1,18 @@
 <div *ngIf="album" class="details">
-    <div>
-        <span class="title">Album Name:</span>
+    <div class="detail-item">
+        <div class="title">Album Name:</div>
         {{album.name}}
     </div>
-    <div *ngIf="album.release_date">
-        <span class="title">Release Date:</span>
+    <div *ngIf="album.release_date" class="detail-item">
+        <div class="title">Release Date:</div>
         {{album.release_date}}
     </div>
-    
+
     <!-- ********** not required ********** -->
-    <div *ngIf="album.artists.length" class="arists">
-        <span class="title">Artists Names: </span>
+    <div *ngIf="album.artists.length" class="arists detail-item">
+        <div class="title">Artists Names: </div>
         <div>
-            <span *ngFor="let artist of album.artists">{{artist.name}}</span>
+            <span *ngFor="let artist of album.artists" class="arist">{{artist.name}}</span>
         </div>
     </div>
     <!-- ********** not required ********** -->
