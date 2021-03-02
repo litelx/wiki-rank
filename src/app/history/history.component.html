@@ -1,0 +1,7 @@
+<p>history works!</p>
+
+<div *ngFor="let searchedItem of user.searchHistory">
+    <a [routerLink]="['/main', {searchedItem: searchedItem}]">
+        {{searchedItem}}
+    </a>
+</div>

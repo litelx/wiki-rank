@@ -1,0 +1,32 @@
+<p>main works!</p>
+<form [formGroup]="searchForm" (ngSubmit)="searchGifs()" class="form">
+    <div>
+        <mat-label>Please enter your wished gif</mat-label>
+        <input matInput [formControl]="querySearch" required>
+    
+        <button mat-raised-button color="primary" mat-button class="submit-btn">
+            Submit
+        </button>
+        
+        <button mat-raised-button color="primary" mat-button class="submit-btn" (click)="goToHistory()">
+            view my history
+        </button>
+    </div>
+
+    <div *ngIf="gifs$ | async as gifs" class="words-list">
+        <div>
+            <button mat-raised-button color="primary" mat-button class="submit-btn" [disabled]="page <= 0" (click)="getMoreGifs(-1)">
+                -
+            </button>
+            {{page}}
+            <button mat-raised-button color="primary" mat-button class="submit-btn" [disabled]="page >= gifs.pagination.total_count" (click)="getMoreGifs(+1)">
+                +
+            </button>
+        </div>
+    
+        <div *ngFor="let gif of gifs.data">
+            <img [src]="gif.images.fixed_height_downsampled.url" loading="lazy" alt="">
+        </div>
+    </div>
+</form>
+
