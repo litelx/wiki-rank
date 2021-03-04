@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { GifUser, Storage } from '../app.model';
-import { GifService } from '../gif.servise';
 import { StorageService } from '../storage.service';
 
 @Component({
@@ -17,7 +15,7 @@ export class LoginComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
         private storage: StorageService,
-        private route: Router,
+        private router: Router
     ) {
         this.loginForm = this.formBuilder.group({
             username: ['', [Validators.required, Validators.pattern('^[\\w]+$')]]
@@ -35,15 +33,15 @@ export class LoginComponent implements OnInit {
     }
 
     public addUser() {
-        let storage: Storage = JSON.parse(localStorage.getItem('callvu'));
+        if (!this.username.value || this.username.value.length < 2) return;
+        let storage: Storage = this.storage.getStorage();
 
         const userExists = storage.find((user: GifUser) => user.username === this.username.value);
         if (!userExists) {
             const newUser: GifUser = {
                 username: this.username.value,
                 isLoggedin: true,
-                searchHistory: [],
-                gifs: {}
+                searchHistory: []
             }
             storage.push(newUser);
             console.log('User added successfully');
@@ -51,9 +49,9 @@ export class LoginComponent implements OnInit {
         } else {
             userExists.isLoggedin = true;
         }
-        localStorage.setItem('callvu', JSON.stringify(storage));
+        this.storage.setStorage(storage)
 
-        this.route.navigate(['main', { searchedItem: '' }]);
+        this.router.navigate(['main', { searchedItem: '' }]);
     }
 
     get username() {

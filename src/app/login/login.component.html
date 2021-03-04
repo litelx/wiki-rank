@@ -1,8 +1,7 @@
 <form [formGroup]="loginForm" (ngSubmit)="addUser()" class="form">
-    <mat-label>Please add your login name</mat-label>
-    <input matInput [formControl]="username" required>
+    <input matInput [formControl]="username" placeholder="Please add your login name" required>
 
-    <button mat-raised-button color="primary" mat-button class="submit-btn">
-        Submit
+    <button mat-raised-button color="primary" class="submit-btn">
+        Log Me In
     </button>
 </form>

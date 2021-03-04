@@ -3,7 +3,6 @@ export type GifUser = {
     username: string;
     isLoggedin: boolean;
     searchHistory: string[];
-    gifs: any
 }
 
 export type Storage = GifUser[];

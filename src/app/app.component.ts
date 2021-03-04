@@ -1,8 +1,4 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { GifService } from './gif.servise';
 
 @Component({
     selector: 'app-root',
@@ -11,11 +7,7 @@ import { GifService } from './gif.servise';
 })
 export class AppComponent {
 
-    constructor(private searchService: GifService) {
+    constructor() {
     }
-
-    // public clearStorage() {
-    //     localStorage.removeItem('callvu');
-    // }
 
 }

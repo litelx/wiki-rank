@@ -1,32 +1,40 @@
-<p>main works!</p>
-<form [formGroup]="searchForm" (ngSubmit)="searchGifs()" class="form">
-    <div>
-        <mat-label>Please enter your wished gif</mat-label>
-        <input matInput [formControl]="querySearch" required>
-    
-        <button mat-raised-button color="primary" mat-button class="submit-btn">
-            Submit
-        </button>
-        
-        <button mat-raised-button color="primary" mat-button class="submit-btn" (click)="goToHistory()">
+<div class="main">
+    <form [formGroup]="searchForm" (ngSubmit)="searchGifs()" class="form">
+        <div>
+            <input matInput [formControl]="querySearch" placeholder="Search a Gif" required>
+            
+            <button mat-raised-button color="primary" mat-button class="submit-btn">
+                Search
+            </button>
+            
+        </div>
+        <button mat-raised-button color="primary" class="history" [disabled]="!user.searchHistory.length" (click)="goToHistory()">
+            <mat-icon>history</mat-icon>
             view my history
         </button>
-    </div>
-
-    <div *ngIf="gifs$ | async as gifs" class="words-list">
-        <div>
-            <button mat-raised-button color="primary" mat-button class="submit-btn" [disabled]="page <= 0" (click)="getMoreGifs(-1)">
+    </form>
+    
+    <div *ngIf="gifs$ | async as gifs" class="gif-list">
+        <div class="navigation-buttons">
+            <button mat-button color="primary" mat-button class="pagination" [disabled]="page <= 0"
+                (click)="getMoreGifs(-1)">
                 -
             </button>
-            {{page}}
-            <button mat-raised-button color="primary" mat-button class="submit-btn" [disabled]="page >= gifs.pagination.total_count" (click)="getMoreGifs(+1)">
+            <span>{{page + 1}}</span>
+            <button mat-button color="primary" mat-button class="pagination"
+                [disabled]="page >= gifs.pagination.total_count" (click)="getMoreGifs(+1)">
                 +
             </button>
         </div>
     
-        <div *ngFor="let gif of gifs.data">
-            <img [src]="gif.images.fixed_height_downsampled.url" loading="lazy" alt="">
+        <div *ngIf="gifs.data.length" class="img-list">
+            <img appLazyLoad *ngFor="let gif of gifs.data" [src]="gif.images.downsized_large.url"
+                [height]="gif.images.downsized_large.height" [width]="gif.images.downsized_large.width" alt="..."
+                loading="lazy">
+        </div>
+    
+        <div *ngIf="!gifs.data.length" class="img-list">
+            Sorry, No Data Found For {{querySearch.value}}
         </div>
     </div>
-</form>
-
+</div>

@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { apiResponse, GifUser, MAX_HISTORY_LENGHT } from '../app.model';
 import { GifService } from '../gif.servise';
+import { StorageService } from '../storage.service';
 
 @Component({
     selector: 'app-main',
@@ -15,10 +16,12 @@ export class MainComponent implements OnInit {
     public searchForm: FormGroup;
     public searchedItem: string;
     public page: number;
+    public user: GifUser;
     public gifs$: Observable<apiResponse>;
 
     constructor(private formBuilder: FormBuilder,
         private gif: GifService,
+        private storage: StorageService,
         private route: ActivatedRoute,
         private router: Router,
     ) {
@@ -28,12 +31,18 @@ export class MainComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.searchedItem = this.route.snapshot.paramMap.get('searchedItem');
-        this.page = 0;
-        if (this.searchedItem) {
+        this.route.params.subscribe(params => {
+            this.searchedItem = params['searchedItem'];
             this.searchForm.setValue({ 'querySearch': this.searchedItem })
             this.gifs$ = this.gif.search(this.searchedItem, this.page);
+        });
+        const storage: Storage = this.storage.getStorage();
+        this.user = storage.find((user: GifUser) => { return user.isLoggedin === true });
+
+        if (!this.user) {
+            this.router.navigate(['']);
         }
+        this.page = 0;
     }
 
     getMoreGifs(page: number): void {
@@ -42,17 +51,16 @@ export class MainComponent implements OnInit {
     }
 
     searchGifs(): void {
-        const storage: Storage = JSON.parse(localStorage.getItem('callvu'));
-        const user: GifUser = storage.find((user: GifUser) => { return user.isLoggedin === true });
+        const storage: Storage = this.storage.getStorage();
+        const user = storage.find((user: GifUser) => { return user.isLoggedin === true });
+        this.user = user;
         if (user?.searchHistory.length === MAX_HISTORY_LENGHT) {
             user.searchHistory.shift();
         }
         user.searchHistory.push(this.querySearch.value);
-        localStorage.setItem('callvu', JSON.stringify(storage));
-        this.page = 0;
+        this.storage.setStorage(storage);
 
-        this.gifs$ = this.gif.search(this.querySearch.value, this.page);
-
+        this.router.navigate(['/main', { searchedItem: this.querySearch.value }]).then(page => { window.location.reload(); });
     }
 
     goToHistory(): void {
@@ -62,5 +70,4 @@ export class MainComponent implements OnInit {
     get querySearch() {
         return this.searchForm.get('querySearch');
     }
-
 }
