@@ -1,15 +1,1 @@
-<form [formGroup]="loginForm" (ngSubmit)="search()" class="form">
-    <mat-label>Search Items</mat-label>
-    <input matInput [formControl]="word" required>
-
-    <button mat-raised-button color="primary" mat-button class="submit-btn">
-        Submit
-    </button>
-
-    <div *ngIf="commonWords$ | async as words" class="words-list">
-        <div *ngFor="let word of words">
-            {{word.word}}: {{word.star}}
-        </div>
-    </div>
-</form>
-<!-- <router-outlet></router-outlet> -->
+<router-outlet></router-outlet>

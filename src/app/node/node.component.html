@@ -1,0 +1,33 @@
+<div class="row">
+    <div class="permissions">
+        <h3>Choose Permissions</h3>
+        <div *ngFor="let permit of permission" (click)="choose(roles[permit])">
+            <input type="radio" [id]="permit" name="permit" [value]="roles[permit]" [(ngModel)]="role">
+            <label for="permit">{{permit}}</label><br>
+        </div>
+    </div>
+
+    <div class="tree-view">
+        <h3>Tree</h3>
+
+        <ng-container *ngTemplateOutlet="treeViewList; context:{ $implicit: node,role:node,depth:node }">
+        </ng-container>
+    </div>
+    <ng-template #treeViewList let-list let-role='role' let-depth='depth'>
+        <ul [attr.role]="role">
+            <li *ngFor="let item of list;let i=index" [id]="item.id" role="nodeitem" [attr.data-index]="i"
+                [attr.data-depth]="item.depth" [attr.aria-expanded]="collapsedState(item)"
+                (click)="toggleSelection($event, item)" #options>
+                <div class="li-items">
+                    <img [src]="getIconUrl(item)" />
+                    <i #icons [id]="item.id" class="fas fa-angle-right"
+                        [ngStyle]="{'display': item.child?.length ? 'inline-block' : 'none'}"></i>
+                    <span>{{item.name}}</span>
+                </div>
+                <ng-container
+                    *ngTemplateOutlet="treeViewList; context:{ $implicit: item.child,role:item.role,depth:item.depth }">
+                </ng-container>
+            </li>
+        </ul>
+    </ng-template>
+</div>

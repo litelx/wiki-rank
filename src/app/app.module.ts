@@ -6,10 +6,12 @@ import { AppComponent } from './app.component';
 import { MaterialsModule } from './shared/material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NodeComponent } from './node/node.component';
 
 @NgModule({
     declarations: [
-        AppComponent
+        AppComponent,
+        NodeComponent
     ],
     imports: [
         BrowserModule,
