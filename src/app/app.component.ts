@@ -28,6 +28,9 @@ export class AppComponent implements OnInit {
     get username() {
         return this.loginForm.get('username');
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of 2e8fe8f... wiki-rank
+=======
 >>>>>>> parent of 2e8fe8f... wiki-rank
 =======
 >>>>>>> parent of 2e8fe8f... wiki-rank
